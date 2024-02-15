@@ -110,10 +110,16 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    float positions[6] = {
-       -0.5f, -0.5f,
-        0.0f, 0.0f,
-        0.5f, -0.5f
+    float positions[] = {
+       -0.5f, -0.5f, //0
+        0.5f, -0.5f, //1
+        0.5f, 0.5f,  //2
+       -0.5f, 0.5f   //3
+    };
+
+    unsigned int indicies[] = {
+        0, 1, 2,
+        2, 3, 0
     };
     
     unsigned int buffer;
@@ -123,7 +129,7 @@ int main(void)
     //everything in openGL that is generated (contextially) gets assigned a unique identifier
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
     //selecting that buffer by its ID
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), positions, GL_STATIC_DRAW);
     //given a target buffer and its intended size/ size of data going into buffer
     //you also have to provide a pointer to the data that will be coppied
     //and usage, go to docs.gl and you can find all function info
@@ -133,6 +139,11 @@ int main(void)
 
     //now what is a shader: program that runs on the gpu -> parralell algorithms
 
+    unsigned int ibo;
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);
+   
     //the vertex shader basically takes in a set of vertecies and formats them in a way and prepares them as vertecies
     //this step is not redundant as it sets the vertecies properly
     //the fragment shader is basically what fills in individual pixels in a specieifeied vertex bound space
@@ -158,7 +169,7 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
