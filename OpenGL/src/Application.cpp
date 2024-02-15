@@ -46,6 +46,9 @@ int main(void)
     //you also have to provide a pointer to the data that will be coppied
     //and usage, go to docs.gl and you can find all function info
 
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
