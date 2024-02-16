@@ -10,6 +10,7 @@
 
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
 struct ShaderProgramSource
 {
@@ -132,28 +133,14 @@ int main(void)
             2, 3, 0
         };
 
-        unsigned int vao;
-        GLCall(glGenVertexArrays(1, &vao));
-        GLCall(glBindVertexArray(vao));
-
+        VertexArray va;
         VertexBuffer vb(positions, 4 * 2 * sizeof(float));
 
-        GLCall(glEnableVertexAttribArray(0));
-        GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
-
-        //now what is a shader: program that runs on the gpu -> parralell algorithms
+        VertexBufferLayout layout;
+        layout.Push<float>(2);
+        va.AddBuffer(vb, layout);
 
         IndexBuffer ib(indicies, 6);
-
-        //the vertex shader basically takes in a set of vertecies and formats them in a way and prepares them as vertecies
-        //this step is not redundant as it sets the vertecies properly
-        //the fragment shader is basically what fills in individual pixels in a specieifeied vertex bound space
-        //the space is bound by the vertecies provided by our vertex shader
-        //the fragment shader rasterizes. which means the pixels get "shaded in" like a coloring book
-        //the fragment shader gets called soooooo many times the vertex shader only gets callled a cpuple time in comparison
-        //fragment shaders are a lot more expensive so try to do as many operations possible in the vertex shader
-        //obv thats not always possi ble because some operations are needed to be done on a pixel basis (lighting)
-        //our current pipeline: vertex shader -> fragment shader
 
         ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
 
@@ -164,7 +151,7 @@ int main(void)
         ASSERT(location != -1);
         GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
 
-        GLCall(glBindVertexArray(0));
+        va.Unbind();
         GLCall(glUseProgram(0));
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
         GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
@@ -181,7 +168,7 @@ int main(void)
             GLCall(glUseProgram(shader));
             GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
 
-            GLCall(glBindVertexArray(vao));
+            va.Bind();
             ib.Bind();
 
             GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
