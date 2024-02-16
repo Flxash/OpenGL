@@ -115,7 +115,10 @@ int main(void)
     /* Initialize the library */
     if (!glfwInit())
         return -1;
-    
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
@@ -128,7 +131,7 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    glfwSwapInterval(1);
+    glfwSwapInterval(2);
 
     if (glewInit() != GLEW_OK)
         std::cout << "ERROR!" << std::endl;
@@ -147,6 +150,10 @@ int main(void)
         2, 3, 0
     };
     
+    unsigned int vao;
+    GLCall(glGenVertexArrays(1, &vao));
+    GLCall(glBindVertexArray(vao));
+
     unsigned int buffer;
     GLCall(glGenBuffers(1, &buffer));
     //generates one buffer at a time provide an address to an integer (unsigned)
@@ -176,7 +183,7 @@ int main(void)
     //the fragment shader rasterizes. which means the pixels get "shaded in" like a coloring book
     //the fragment shader gets called soooooo many times the vertex shader only gets callled a cpuple time in comparison
     //fragment shaders are a lot more expensive so try to do as many operations possible in the vertex shader
-    //obv thats not always possible because some operations are needed to be done on a pixel basis (lighting)
+    //obv thats not always possi ble because some operations are needed to be done on a pixel basis (lighting)
     //our current pipeline: vertex shader -> fragment shader
 
     ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
@@ -188,6 +195,12 @@ int main(void)
     ASSERT(location != -1);
     GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
 
+    GLCall(glBindVertexArray(0));
+    GLCall(glUseProgram(0));
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+
+
     float r = 0.0f;
     float increment = 0.05f;
     /* Loop until the user closes the window */
@@ -196,7 +209,12 @@ int main(void)
         /* Render here */
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
+        GLCall(glUseProgram(shader));
         GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));
+
+        GLCall(glBindVertexArray(vao));
+        //GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
+
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
         //uniforms are set perdraw
         //if you want the 2 triangles in this square to be changing colors independantly 
@@ -210,13 +228,13 @@ int main(void)
         r += increment;
 
         /* Swap front and back buffers */
-        GLCall(glfwSwapBuffers(window));
+        glfwSwapBuffers(window);
 
         /* Poll for and process events */
-        GLCall(glfwPollEvents());
+        glfwPollEvents();
     }
 
-    glDeleteProgram(shader);
+    GLCall(glDeleteProgram(shader));
 
     glfwTerminate(); 
     return 0;
