@@ -31,7 +31,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(960, 540, "Hello World", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -49,10 +49,10 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
     {
         float positions[] = {
-           -0.5f, -0.5f, 0.0f, 0.0f, //0
-            0.5f, -0.5f, 1.0f, 0.0f, //1
-            0.5f,  0.5f, 1.0f, 1.0f,  //2
-           -0.5f,  0.5f, 0.0f, 1.0f  //3
+           100.0f, 100.0f, 0.0f, 0.0f,  //0
+           200.0f, 100.0f, 1.0f, 0.0f,  //1
+           200.0f,  200.0f, 1.0f, 1.0f, //2
+           100.0f,  200.0f, 0.0f, 1.0f  //3
         };
 
         unsigned int indicies[] = {
@@ -73,13 +73,21 @@ int main(void)
         
         IndexBuffer ib(indicies, 6);
 
-        glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
-        //orthographic matruiuix
+        glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+        //orthographic matrix
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));
+        //view matrix or camera transformation
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
+        //model matrix
+
+        glm::mat4 mvp = proj * view * model;
+        //this mvp multiplication is in reverse order because the memory layout in opengl
+        //for matrices is column view ordering, so you can think of transformation order from left to right
 
         Shader shader("res/shaders/Basic.shader");
         shader.Bind();
         shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
-        shader.SetUniformMat4f("u_MVP", proj);
+        shader.SetUniformMat4f("u_MVP", mvp);  
 
         Texture texture("res/textures/Al_Baik_Logo.svg.png");
         texture.Bind();
