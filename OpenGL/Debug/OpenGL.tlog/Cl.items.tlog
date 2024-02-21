@@ -2,6 +2,7 @@ C:\Dev\OpenGl\OpenGL\OpenGL\src\Application.cpp;C:\Dev\OpenGl\OpenGL\OpenGL\Debu
 C:\Dev\OpenGl\OpenGL\OpenGL\src\IndexBuffer.cpp;C:\Dev\OpenGl\OpenGL\OpenGL\Debug\IndexBuffer.obj
 C:\Dev\OpenGl\OpenGL\OpenGL\src\Renderer.cpp;C:\Dev\OpenGl\OpenGL\OpenGL\Debug\Renderer.obj
 C:\Dev\OpenGl\OpenGL\OpenGL\src\Shader.cpp;C:\Dev\OpenGl\OpenGL\OpenGL\Debug\Shader.obj
+C:\Dev\OpenGl\OpenGL\OpenGL\src\tests\Test.cpp;C:\Dev\OpenGl\OpenGL\OpenGL\Debug\Test.obj
 C:\Dev\OpenGl\OpenGL\OpenGL\src\tests\TestClearColor.cpp;C:\Dev\OpenGl\OpenGL\OpenGL\Debug\TestClearColor.obj
 C:\Dev\OpenGl\OpenGL\OpenGL\src\Texture.cpp;C:\Dev\OpenGl\OpenGL\OpenGL\Debug\Texture.obj
 C:\Dev\OpenGl\OpenGL\OpenGL\src\vendor\glm\detail\glm.cpp;C:\Dev\OpenGl\OpenGL\OpenGL\Debug\glm.obj
