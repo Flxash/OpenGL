@@ -1,11 +1,12 @@
 ﻿  Application.cpp
-  Test.cpp
+  IndexBuffer.cpp
+  Renderer.cpp
+  Shader.cpp
+  Texture.cpp
+  VertexArray.cpp
+  VertexBuffer.cpp
   TestClearColor.cpp
   TestTexture2D.cpp
 C:\Dev\OpenGl\OpenGL\OpenGL\src\tests\TestTexture2D.cpp(41,10): warning C4930: 'Shader shader(void)': prototyped function not called (was a variable definition intended?)
   Generating Code...
-Debug\glm.obj : warning LNK4042: object specified more than once; extras ignored
-LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-glew32s.lib(glew.obj) : warning LNK4099: PDB '' was not found with 'glew32s.lib(glew.obj)' or at ''; linking object as if no debug info
   OpenGL.vcxproj -> C:\Dev\OpenGl\OpenGL\Debug\OpenGL.exe
